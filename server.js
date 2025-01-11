@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // GitHub URL for the raw playerData.json file
-const playerDataUrl = 'https://raw.githubusercontent.com/askaine/ESMAPI/main/playerData.json';
+const playerDataUrl = 'https://raw.githubusercontent.com/askaine/ESMAPI/blob/main/playerData.json';
 
 // Fetch playerData.json from GitHub and send it in the response
 app.get('/playerData', async (req, res) => {
@@ -23,31 +23,37 @@ app.get('/playerData', async (req, res) => {
         res.status(500).json({ message: 'Error fetching player data from GitHub' });
     }
 });
-const path = require('path');
+app.post('/playerData/Add', (req, res) => {
+    const playerData = req.body; // The player data sent from the mod
 
-app.post('/playerData/Add', async (req, res) => {
-    const playerData = req.body;
+    // Path to your playerData.json file
     const filePath = path.join(__dirname, 'playerData.json');
 
-    try {
-        let existingData = [];
-
-        try {
-            const data = await fs.readFile(filePath, 'utf8');
-            existingData = JSON.parse(data);
-        } catch (err) {
-            if (err.code !== 'ENOENT') {
-                throw new Error('Error reading player data file');
-            }
+    // Read the current playerData.json, or initialize an empty array if it doesn't exist
+    fs.readFile(filePath, (err, data) => {
+        if (err && err.code !== 'ENOENT') {
+            console.error('Error reading player data file:', err);
+            return res.status(500).json({ message: 'Error reading player data file' });
         }
 
+        let existingData = [];
+        if (!err) {
+            existingData = JSON.parse(data);
+        }
+
+        // Add the new player data
         existingData.push(playerData);
-        await fs.writeFile(filePath, JSON.stringify(existingData, null, 2), 'utf8');
-        res.status(200).json({ message: 'Player data successfully stored' });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: 'Error saving player data' });
-    }
+
+        // Save the updated player data back to playerData.json
+        fs.writeFile(filePath, JSON.stringify(existingData, null, 2), (err) => {
+            if (err) {
+                console.error('Error writing player data file:', err);
+                return res.status(500).json({ message: 'Error saving player data' });
+            }
+            console.log('Player data saved successfully');
+            res.status(200).json({ message: 'Player data successfully stored' });
+        });
+    });
 });
 
 // Get player data
@@ -60,5 +66,5 @@ app.get('/', (req, res) => {
 
 // Start the server
 app.listen(port, () => {
-    console.log(`API server running on http://localhost:${port}`);
+    console.log(API server running on http://localhost:${port});
 });
