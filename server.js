@@ -66,5 +66,5 @@ app.get('/', (req, res) => {
 
 // Start the server
 app.listen(port, () => {
-    console.log(API server running on http://localhost:${port});
+    console.log(`API server running on http://localhost:${port}`);
 });
