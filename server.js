@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // GitHub URL for the raw playerData.json file
-const playerDataUrl = 'https://raw.githubusercontent.com/askaine/ESMAPI/main/playerData.json';
+const playerDataUrl = 'https://raw.githubusercontent.com/askaine/ESMAPI/blob/main/playerData.json';
 
 // Fetch playerData.json from GitHub and send it in the response
 app.get('/playerData', async (req, res) => {
