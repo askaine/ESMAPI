@@ -23,7 +23,6 @@ app.get('/playerData', async (req, res) => {
         res.status(500).json({ message: 'Error fetching player data from GitHub' });
     }
 });
-const fs = require('fs').promises;
 const path = require('path');
 
 app.post('/playerData/Add', async (req, res) => {
