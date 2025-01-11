@@ -23,43 +23,45 @@ app.get('/playerData', async (req, res) => {
         res.status(500).json({ message: 'Error fetching player data from GitHub' });
     }
 });
+app.post('/playerData/Add', (req, res) => {
+    const playerData = req.body; // The player data sent from the mod
+
+    // Path to your playerData.json file
+    const filePath = path.join(__dirname, 'playerData.json');
+
+    // Read the current playerData.json, or initialize an empty array if it doesn't exist
+    fs.readFile(filePath, (err, data) => {
+        if (err && err.code !== 'ENOENT') {
+            console.error('Error reading player data file:', err);
+            return res.status(500).json({ message: 'Error reading player data file' });
+        }
+
+        let existingData = [];
+        if (!err) {
+            existingData = JSON.parse(data);
+        }
+
+        // Add the new player data
+        existingData.push(playerData);
+
+        // Save the updated player data back to playerData.json
+        fs.writeFile(filePath, JSON.stringify(existingData, null, 2), (err) => {
+            if (err) {
+                console.error('Error writing player data file:', err);
+                return res.status(500).json({ message: 'Error saving player data' });
+            }
+            console.log('Player data saved successfully');
+            res.status(200).json({ message: 'Player data successfully stored' });
+        });
+    });
+});
 
 // Get player data
-app.get('/player/:uuid', async (req, res) => {
-    const uuid = req.params.uuid;
-    try {
-        const response = await axios.get(playerDataUrl);
-        const data = response.data;
-        res.json(data[uuid] || { message: 'Player not found' });
-    } catch (error) {
-        res.status(500).json({ message: 'Error fetching player data from GitHub' });
-    }
-});
 
-// Save or update player data
-app.post('/player/:uuid', async (req, res) => {
-    const uuid = req.params.uuid;
-    const newData = req.body;
-
-    try {
-        const response = await axios.get(playerDataUrl);
-        const data = response.data;
-
-        data[uuid] = newData;
-
-        // Save the updated playerData.json back to GitHub (requires GitHub API and authentication)
-        // For now, we'll only modify the local data store, but you can implement the push to GitHub here
-        // Example: await axios.put('https://api.github.com/repos/yourusername/yourrepo/contents/playerData.json', updatedData);
-
-        res.json({ message: 'Data saved successfully', data: newData });
-    } catch (error) {
-        res.status(500).json({ message: 'Error updating player data from GitHub' });
-    }
-});
 
 // Default route
 app.get('/', (req, res) => {
-    res.send('Welcome to the API! Use /playerData to get player data.');
+    res.send('Welcome to the ESM API!');
 });
 
 // Start the server
