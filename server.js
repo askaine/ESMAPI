@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const fs = require('fs');
+const fs = require('fs').promises;
+const path = require('path');
 const cors = require('cors');
 const axios = require('axios');  // Required to fetch data from GitHub
 
@@ -8,6 +9,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // Middleware
+app.use(express.json());
 app.use(bodyParser.json());
 app.use(cors());
 
