@@ -1,0 +1,16 @@
+[
+{
+  "modid": "ExoticScanMod",
+  "name": "ESM",
+  "description": "Exotic armor scan mod",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["askaine_e"],
+  "credits": "The Forge and FML guys, for making this example",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

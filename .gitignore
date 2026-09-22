@@ -1,0 +1,22 @@
+# Build output
+/build/
+/bin/
+/dist/
+*.class
+*.jar
+
+# Local secrets / config
+.env
+config.local.properties
+DataBase.json
+
+# IDE
+.eclipse/
+.settings/
+.classpath
+.project
+.metadata/
+
+# OS
+.DS_Store
+Thumbs.db
