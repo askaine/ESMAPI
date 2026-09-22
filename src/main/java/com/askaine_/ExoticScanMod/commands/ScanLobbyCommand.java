@@ -15,7 +15,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import java.io.FileReader;
-import java.io.IOException;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -46,7 +45,6 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -54,7 +52,6 @@ import java.util.List;
 import java.util.ArrayList;
 import java.io.ByteArrayOutputStream;
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.util.zip.GZIPInputStream;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -68,16 +65,13 @@ import net.minecraft.nbt.NBTException;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
-import java.io.IOException;
 
 import net.querz.nbt.io.NamedTag;
 import net.querz.nbt.io.NBTDeserializer;
 import net.querz.nbt.tag.*;
 import java.io.File;
-import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Arrays;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.zip.GZIPInputStream;
 import net.querz.io.Deserializer;
@@ -86,7 +80,6 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Collections;

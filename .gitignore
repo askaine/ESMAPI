@@ -5,10 +5,14 @@
 *.class
 *.jar
 
-# Local secrets / config
+# Secrets / credentials - NEVER commit these
 .env
 config.local.properties
 DataBase.json
+*firebase-adminsdk*.json
+*serviceAccountKey*.json
+credentials/
+secrets/
 
 # IDE
 .eclipse/
