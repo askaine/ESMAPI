@@ -1,59 +1,55 @@
--------------------------------------------
-Source installation information for modders
--------------------------------------------
-This code follows the Minecraft Forge installation methodology. It will apply
-some small patches to the vanilla MCP source code, giving you and it access 
-to some of the data and functions you need to build a successful mod.
+# ExoticScanMod (ESM)
 
-Note also that the patches are built against "unrenamed" MCP source code (aka
-srgnames) - this means that you will not be able to read them directly against
-normal code.
+A Minecraft Forge 1.8.9 client mod for **Hypixel Skyblock** that scans players in a lobby, and item frames / armor stands on an island, for "exotic" (specially recolored) leather armor — a rarity/collectible flex among Skyblock players — and logs what it finds to a player database.
 
-Source pack installation information:
+## Commands
 
-Standalone source installation
-==============================
+| Command | Aliases | What it does |
+|---|---|---|
+| `/scan` | — | Scans every visible player in the current lobby via the Hypixel API, decodes their armor NBT data, and checks it against known exotic/fairy/crystal color values. |
+| `/scanisland` | — | Scans item frames and armor stands within 50 blocks of the player for exotic-colored items. |
+| `/scanauction` | — | Placeholder — currently only prints a "Scanning Auction House..." message; not yet implemented. |
+| `/ESMconfig` | `esmconfig`, `ESMCONFIG`, `EsMcOnFiG` | Opens the in-game config GUI to set your Hypixel API key, level cap, and the "include fairy" toggle. |
 
-Step 1: Open your command-line and browse to the folder where you extracted the zip file.
+## Requirements
 
-Step 2: Once you have a command window up in the folder that the downloaded material was placed, type:
+- Minecraft **1.8.9**
+- Minecraft Forge (1.8.9-compatible build)
+- A [Hypixel API key](https://developer.hypixel.net/), set in-game via `/ESMconfig`
 
-Windows: "gradlew setupDecompWorkspace"
-Linux/Mac OS: "./gradlew setupDecompWorkspace"
+## Building
 
-Step 3: After all that finished, you're left with a choice.
-For eclipse, run "gradlew eclipse" (./gradlew eclipse if you are on Mac/Linux)
+Standard ForgeGradle build (`./gradlew build`). Besides Forge's bundled Gson, the project depends on:
 
-If you preffer to use IntelliJ, steps are a little different.
-1. Open IDEA, and import project.
-2. Select your build.gradle file and have it import.
-3. Once it's finished you must close IntelliJ and run the following command:
+- **Apache HttpClient** — used by `ESMAPI` for the Firebase Realtime Database sync
+- **net.querz NBT** — used to parse decoded item NBT data (`NBTDeserializer`, `NamedTag`)
+- **Kotlin** — `Colours.kt` is Kotlin, so the Kotlin Gradle plugin and a mixed Java/Kotlin source set need to be configured
 
-"gradlew genIntellijRuns" (./gradlew genIntellijRuns if you are on Mac/Linux)
+None of these ship with a default Forge project, so make sure `build.gradle` declares them explicitly or a fresh clone won't compile.
 
-Step 4: The final step is to open Eclipse and switch your workspace to /eclipse/ (if you use IDEA, it should automatically start on your project)
+## Configuration / secrets
 
-If at any point you are missing libraries in your IDE, or you've run into problems you can run "gradlew --refresh-dependencies" to refresh the local cache. "gradlew clean" to reset everything {this does not effect your code} and then start the processs again.
+This project talks to a Firebase Realtime Database. **Do not commit real credentials.** The repo's `.gitignore` excludes:
 
-Should it still not work, 
-Refer to #ForgeGradle on EsperNet for more information about the gradle environment.
+- `DataBase.json` (the local player-data cache)
+- Any Firebase service-account / admin SDK key files
+- `.env` and `config.local.properties`
 
-Tip:
-If you do not care about seeing Minecraft's source code you can replace "setupDecompWorkspace" with one of the following:
-"setupDevWorkspace": Will patch, deobfusicated, and gather required assets to run minecraft, but will not generated human readable source code.
-"setupCIWorkspace": Same as Dev but will not download any assets. This is useful in build servers as it is the fastest because it does the least work.
+Set your actual database URL and any keys through a local, gitignored config rather than editing the placeholder fields directly in source.
 
-Tip:
-When using Decomp workspace, the Minecraft source code is NOT added to your workspace in a editable way. Minecraft is treated like a normal Library. Sources are there for documentation and research purposes and usually can be accessed under the 'referenced libraries' section of your IDE.
+## How data is stored
 
-Forge source installation
-=========================
-MinecraftForge ships with this code and installs it as part of the forge
-installation process, no further action is required on your part.
+The mod currently maintains a **local** `DataBase.json` next to the run directory, written to after every `/scan`. There's also an `ESMAPI` class set up to sync the same data to a Firebase Realtime Database, with security rules already defined for it — but as of this version, the code path that would call it isn't wired into `/scan`'s write step. If you're expecting cloud sync, this is worth verifying against your live Firebase console rather than assuming it's happening.
 
-LexManos' Install Video
-=======================
-https://www.youtube.com/watch?v=8VEdtQLuLO0&feature=youtu.be
+## Known issues / in progress
 
-For more details update more often refer to the Forge Forums:
-http://www.minecraftforge.net/forum/index.php/topic,14048.0.html
+- `/scanauction` is a stub, not yet implemented
+- `isSkyblockIsland()` in `ScanIslandCommand` always returns `true` — no real island detection yet
+- The Hypixel API request rate limiter counts requests but doesn't stop them from being sent once the 300/min cap is hit — it only stops their responses from being processed
+- `ConfigGui` prints a debug chat message on every tick while open — likely leftover debug logging
+- `ExoticScanMod.MODID` (`"ExoticsScanmod"`) doesn't match the package/class naming (`ExoticScanMod`) — cosmetic, but worth aligning
+- Several duplicate/unused imports throughout (harmless to compile, just messy for a public repo)
+
+## License
+
+_Add a license here before making the repo public, or it defaults to "all rights reserved."_
