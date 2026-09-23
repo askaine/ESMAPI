@@ -1,6 +1,6 @@
 # ExoticScanMod (ESM)
 
-A Minecraft Forge 1.8.9 client mod for **Hypixel Skyblock** that scans players in a lobby, and item frames / armor stands on an island, for "exotic" (specially recolored) leather armor — a rarity/collectible flex among Skyblock players — and logs what it finds to a player database.
+A Minecraft Forge 1.8.9 client mod for **Hypixel Skyblock** that scans players in a lobby, and item frames / armor stands on an island, for "exotic" (specially recolored) leather armor - a rarity/collectible flex among Skyblock players - and logs what it finds to a player database.
 
 ## Commands
 
