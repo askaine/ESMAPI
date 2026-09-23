@@ -52,3 +52,4 @@ The mod currently maintains a **local** `DataBase.json` next to the run director
 
 ## License
 
+MIT
